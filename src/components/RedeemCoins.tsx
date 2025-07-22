@@ -55,13 +55,19 @@ export function RedeemCoins({ coins, onWithdrawal }: RedeemCoinsProps) {
 
     setIsProcessing(true)
 
+    // Show processing toast
+    toast({
+      title: "Processing Withdrawal...",
+      description: `Sending ${selectedTier.label} to ${paypalEmail}`,
+    })
+
     try {
       const success = await onWithdrawal(selectedTier.amount, selectedTier.coins, paypalEmail)
       
       if (success) {
         toast({
-          title: "Withdrawal Successful!",
-          description: `${selectedTier.label} has been sent to ${paypalEmail}`,
+          title: "🎉 Withdrawal Successful!",
+          description: `${selectedTier.label} demo payout completed! Check your withdrawal history.`,
         })
         setIsDialogOpen(false)
         setPaypalEmail('')
@@ -74,6 +80,7 @@ export function RedeemCoins({ coins, onWithdrawal }: RedeemCoinsProps) {
         })
       }
     } catch (error) {
+      console.error('Withdrawal error:', error)
       toast({
         title: "Error",
         description: "Something went wrong. Please try again.",
@@ -96,10 +103,13 @@ export function RedeemCoins({ coins, onWithdrawal }: RedeemCoinsProps) {
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-yellow-400 mb-2">Redeem Coins</h2>
-        <p className="text-slate-300">Exchange your coins for real PayPal cash</p>
-        <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-3 mt-3">
-          <p className="text-blue-400 text-sm font-medium">🎮 Demo Mode</p>
-          <p className="text-blue-300 text-xs">This is a portfolio demo - no real money is sent</p>
+        <p className="text-slate-300">Exchange your coins for PayPal cash</p>
+        <div className="bg-blue-900/50 border border-blue-500 rounded-lg p-4 mt-3 animate-pulse">
+          <p className="text-blue-400 text-sm font-bold flex items-center justify-center gap-2">
+            🎮 Demo Mode Active
+            <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs">SIMULATION</span>
+          </p>
+          <p className="text-blue-300 text-xs mt-1">This is a portfolio demo - withdrawals are simulated, no real money is sent</p>
         </div>
       </div>
 
